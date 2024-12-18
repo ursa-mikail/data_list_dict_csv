@@ -25,8 +25,9 @@ def list_to_csv(filename, headers, *lists):
         for row in zip(*lists):
             writer.writerow(row)
 
-# Function to convert CSV to list
-def csv_to_list(filename):
+# Function to convert CSV to dictionary with variable names
+def csv_to_dict(filename):
+    variables = {}
     with open(filename, mode='r') as file:
         reader = csv.reader(file)
         headers = next(reader)
@@ -34,7 +35,8 @@ def csv_to_list(filename):
         for row in reader:
             for header, value in zip(headers, row):
                 lists[header].append(int(value))
-        return lists
+        variables.update(lists)
+    return variables
 
 # Example usage:
 keys = ["Kismet", "Pneuma", "Psyche", "Opus", "Soma"]
@@ -52,13 +54,40 @@ print("Values:", values)
 # Convert lists to CSV
 list_to_csv('output.csv', keys, *lists)
 
-# Convert CSV back to lists
-csv_data = csv_to_list('output.csv')
-print("CSV to List:", csv_data)
+# Convert CSV back to dictionary with variable names
+csv_data_dict = csv_to_dict('output.csv')
+print("CSV to Dictionary with Variables:", csv_data_dict)
+
+# Dynamically create variables
+locals().update(csv_data_dict)
+
+# Accessing the variables created
+print("Kismet:", Kismet)
+print("Pneuma:", Pneuma)
+print("Psyche:", Psyche)
+print("Opus:", Opus)
+print("Soma:", Soma)
+
+print(f"\n[csv_data_dict]:")
+# Print csv_data_dict keys and values
+for key, value in csv_data_dict.items():
+    print(f"{key}: {value}")
 
 """
 Dictionary: {'Kismet': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Pneuma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Psyche': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Opus': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Soma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]}
 Keys: ['Kismet', 'Pneuma', 'Psyche', 'Opus', 'Soma']
 Values: [[50, 50, 50, 0, 0, 0, 0, 0, 50, 75], [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]]
-CSV to List: {'Kismet': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Pneuma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Psyche': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Opus': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Soma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]}
+CSV to Dictionary with Variables: {'Kismet': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Pneuma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Psyche': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Opus': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75], 'Soma': [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]}
+Kismet: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Pneuma: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Psyche: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Opus: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Soma: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+
+[csv_data_dict]:
+Kismet: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Pneuma: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Psyche: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Opus: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
+Soma: [50, 50, 50, 0, 0, 0, 0, 0, 50, 75]
 """
